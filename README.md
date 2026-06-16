@@ -104,6 +104,12 @@ Group and length-of-stay decisions share one idea: accept a request when its
 contribution covers the opportunity cost of the capacity it displaces (a
 marginal seat value or a sum of nightly bid prices).
 
+## Charts
+
+With `revmng[plot]` installed, each method has a chart in a clean, neutral style:
+
+![revmng charts: EMSR marginal seat revenue curves with protection levels, nested booking limits per fare class, the overbooking cost trade-off, price optimization with revenue and profit against price, the newsvendor expected-profit curve, and the revenue opportunity benchmark](assets/charts.png)
+
 Demand for the capacity-control methods is assumed normal and independent, with
 the classic low-before-high booking assumption. EMSR-a and EMSR-b are
 heuristics; for two classes both reduce to Littlewood's optimal rule.
