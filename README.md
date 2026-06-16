@@ -1,7 +1,7 @@
 # revmng
 
 [![CI](https://github.com/arikanatakan/revmng/actions/workflows/ci.yml/badge.svg)](https://github.com/arikanatakan/revmng/actions/workflows/ci.yml)
-[![PyPI](https://img.shields.io/pypi/v/revmng?v=2)](https://pypi.org/project/revmng/)
+[![PyPI](https://img.shields.io/pypi/v/revmng?v=3)](https://pypi.org/project/revmng/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 Revenue management for Python: the building blocks for selling fixed, perishable
