@@ -1,8 +1,8 @@
 # revmng
 
-[![PyPI](https://img.shields.io/pypi/v/revmng.svg)](https://pypi.org/project/revmng/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![CI](https://github.com/arikanatakan/revmng/actions/workflows/ci.yml/badge.svg)](https://github.com/arikanatakan/revmng/actions/workflows/ci.yml)
+[![PyPI](https://img.shields.io/pypi/v/revmng?v=2)](https://pypi.org/project/revmng/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 Revenue management for Python: the building blocks for selling fixed, perishable
 capacity well. Single-leg seat protection, overbooking, pricing, network bid
@@ -11,6 +11,8 @@ and validated against published worked examples.
 
 The core has **no third-party dependencies**. Every result carries provenance
 (library version, input hash, timestamp) and a JSON-safe `to_dict()`.
+
+![revmng framework: inputs (fares and demand, capacity, no-shows and costs) flow through the revenue-management methods (single-leg control with Littlewood, EMSR-a/b and the exact DP, overbooking, pricing, network bid prices, group and length-of-stay) into a result with provenance, over a measurement layer of RevPAR, yield, load factor and ROM](assets/framework.png)
 
 ```bash
 pip install revmng
@@ -142,4 +144,5 @@ The methods are checked against published and hand-derived worked examples (see
 
 ## License
 
-MIT. See [LICENSE](LICENSE).
+MIT. Written and maintained by [Atakan Arikan](https://github.com/arikanatakan),
+MSc Student at Tsinghua University and Politecnico di Milano.
