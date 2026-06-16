@@ -128,6 +128,13 @@ The methods are checked against published and hand-derived worked examples (see
 | EMSR-b (two classes) | Belobaba (1989) | equals Littlewood's optimal rule |
 | EMSR-b (three classes) | Belobaba (1989) formula, arithmetic shown | protection 23.71 / 70.83, limits 97 / 50 |
 | Optimal control (DP) | Talluri and van Ryzin (2004) | matches Littlewood for two classes; expected revenue at least EMSR-b's |
+
+A clean multi-class EMSR-b worked example with both inputs and outputs is hard to
+find in the open literature, so the heuristics are also cross-checked two
+independent ways (`tests/test_crosscheck.py`): their protection levels match a
+separate SciPy implementation of the same formulas to 1e-9, and over many random
+instances EMSR-b never exceeds revmng's exact dynamic program and stays within
+about 0.5% of it, matching Belobaba's reported near-optimality.
 | Group displacement | standard displacement analysis, arithmetic shown | 40 displaced room-nights, cost 2800, break-even rate 81.11 |
 | Length-of-stay bid price | Talluri and van Ryzin (2004), arithmetic shown | 290 hurdle, accept at rate 320 |
 | Newsvendor quantity | critical-fractile rule | reproduced |
