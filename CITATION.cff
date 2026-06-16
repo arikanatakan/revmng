@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+message: "If you use revmng in your work, please cite it as below."
+title: "revmng: revenue management for Python"
+abstract: >-
+  Revenue management for Python: single-leg seat protection (Littlewood, EMSR
+  and the exact dynamic program), overbooking, pricing, group displacement,
+  length-of-stay and network bid prices, with the standard performance metrics.
+  Computed from standard methods and validated against published worked examples.
+type: software
+authors:
+  - family-names: Arikan
+    given-names: Atakan
+version: 0.2.0
+date-released: 2026-06-16
+license: MIT
+repository-code: "https://github.com/arikanatakan/revmng"
+url: "https://github.com/arikanatakan/revmng"
+keywords:
+  - revenue-management
+  - yield-management
+  - pricing
+  - overbooking
+  - emsr
+  - bid-price
+  - airline
+  - hotel
