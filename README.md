@@ -14,6 +14,10 @@ The core has **no third-party dependencies**. Every result carries provenance
 
 ![revmng framework: inputs (fares and demand, capacity, no-shows and costs) flow through the revenue-management methods (single-leg control with Littlewood, EMSR-a/b and the exact DP, overbooking, pricing, network bid prices, group and length-of-stay) into a result with provenance, over a measurement layer of RevPAR, yield, load factor and ROM](assets/framework.png)
 
+With `revmng[plot]` installed, each method also has a chart in a clean, neutral style:
+
+![revmng charts: EMSR marginal seat revenue curves with protection levels, nested booking limits per fare class, the overbooking cost trade-off, price optimization with revenue and profit against price, the newsvendor expected-profit curve, and the revenue opportunity benchmark](assets/charts.png)
+
 ```bash
 pip install revmng
 ```
@@ -103,12 +107,6 @@ the optimal expected revenue; `policy_revenue` scores any policy against it.
 Group and length-of-stay decisions share one idea: accept a request when its
 contribution covers the opportunity cost of the capacity it displaces (a
 marginal seat value or a sum of nightly bid prices).
-
-## Charts
-
-With `revmng[plot]` installed, each method has a chart in a clean, neutral style:
-
-![revmng charts: EMSR marginal seat revenue curves with protection levels, nested booking limits per fare class, the overbooking cost trade-off, price optimization with revenue and profit against price, the newsvendor expected-profit curve, and the revenue opportunity benchmark](assets/charts.png)
 
 Demand for the capacity-control methods is assumed normal and independent, with
 the classic low-before-high booking assumption. EMSR-a and EMSR-b are
