@@ -1,0 +1,94 @@
+{
+  "cases": [
+    {
+      "id": "phillips-9.2-littlewood-ratio-0.4",
+      "source": "R. Phillips, Pricing and Revenue Optimization (2005), Example 9.2: capacity 100, full-fare demand N(50, 100). Reported discount booking limit 25 at fare ratio 0.4.",
+      "kind": "littlewood_booking_limit",
+      "inputs": {"fare_high": 100, "fare_low": 40, "mean_high": 50, "sd_high": 100, "capacity": 100},
+      "expected": {"booking_limit_low_int": 25},
+      "tol": 0
+    },
+    {
+      "id": "phillips-9.2-littlewood-ratio-0.5",
+      "source": "R. Phillips, Pricing and Revenue Optimization (2005), Example 9.2. Reported discount booking limit 50 at fare ratio 0.5.",
+      "kind": "littlewood_booking_limit",
+      "inputs": {"fare_high": 100, "fare_low": 50, "mean_high": 50, "sd_high": 100, "capacity": 100},
+      "expected": {"booking_limit_low_int": 50},
+      "tol": 0
+    },
+    {
+      "id": "phillips-9.2-littlewood-ratio-0.6",
+      "source": "R. Phillips, Pricing and Revenue Optimization (2005), Example 9.2. Reported discount booking limit 76 at fare ratio 0.6.",
+      "kind": "littlewood_booking_limit",
+      "inputs": {"fare_high": 100, "fare_low": 60, "mean_high": 50, "sd_high": 100, "capacity": 100},
+      "expected": {"booking_limit_low_int": 76},
+      "tol": 0
+    },
+    {
+      "id": "phillips-9.7-revenue-opportunity",
+      "source": "R. Phillips, Pricing and Revenue Optimization (2005), Example 9.7: four fares (1000, 800, 600, 200), capacity 100, demand (25, 30, 20, 50), nested limits giving realized 59200, perfect 66000, no-control 46000, ROM 66%.",
+      "kind": "revenue_opportunity",
+      "inputs": {
+        "fares": [1000, 800, 600, 200],
+        "demand": [25, 30, 20, 50],
+        "capacity": 100,
+        "booking_limits": [100, 70, 45, 32]
+      },
+      "expected": {
+        "perfect_revenue": 66000,
+        "no_control_revenue": 46000,
+        "realized_revenue": 59200,
+        "rom": 0.66
+      },
+      "tol": 1.0
+    },
+    {
+      "id": "emsr-b-three-class-belobaba-formula",
+      "source": "Belobaba (1989) EMSR-b formula, arithmetic shown. Fares 1000/700/400, demand N(30,12)/N(40,15)/N(60,20), capacity 120. Boundary 1: z=Phi^-1(0.3)=-0.5244, y1=30-6.293=23.71. Boundary 2: r_bar=58000/70=828.57, z=Phi^-1(0.51724)=0.0433, y2=70+0.831=70.83. Booking limits = 120 - floor(y): 97 and 50.",
+      "kind": "emsr_b",
+      "inputs": {"classes": [[1000, 30, 12], [700, 40, 15], [400, 60, 20]], "capacity": 120},
+      "expected": {"protection_levels": [23.71, 70.83], "booking_limits_int": [120, 97, 50]},
+      "tol": 0.05
+    },
+    {
+      "id": "group-displacement-multi-night-hand",
+      "source": "Standard displacement analysis, arithmetic shown. 100 rooms, group 30/night for 3 nights, transient demand 70/95/85, contribution 70 per room. Displaced = max(0, demand - (100-30)) = 0+25+15 = 40 room-nights, valued at 70 = 2800.",
+      "kind": "group_displacement",
+      "inputs": {"group_size": 30, "capacity": 100, "demand": [70, 95, 85], "value_per_unit": 70},
+      "expected": {"displacement_cost": 2800},
+      "tol": 0.01
+    },
+    {
+      "id": "group-evaluate-break-even-hand",
+      "source": "Standard displacement analysis, arithmetic shown. Group 90 room-nights at rate 60, variable cost 50, displacement cost 2800. Contribution (60-50)*90 = 900, net 900-2800 = -1900 (reject); break-even rate 50 + 2800/90 = 81.11.",
+      "kind": "group",
+      "inputs": {"group_rate": 60, "units": 90, "displacement_cost": 2800, "variable_cost": 50},
+      "expected": {"net_benefit": -1900, "break_even_rate": 81.111, "accept": false},
+      "tol": 0.01
+    },
+    {
+      "id": "los-bid-price-stay-hand",
+      "source": "Bid-price control (Talluri and van Ryzin, 2004) applied to length of stay, arithmetic shown. Nightly bid prices Mon 80, Tue 120, Wed 90; a Mon-Wed stay at total rate 320 clears the 290 hurdle with slack 30.",
+      "kind": "los",
+      "inputs": {"nightly_bid_prices": {"Mon": 80, "Tue": 120, "Wed": 90}, "nights": ["Mon", "Tue", "Wed"], "total_rate": 320},
+      "expected": {"hurdle": 290, "slack": 30, "accept": true},
+      "tol": 0.01
+    },
+    {
+      "id": "newsvendor-critical-fractile-hand",
+      "source": "Hand-derived from the critical-fractile rule: price 10, cost 4, demand N(100, 30). CR = 6/10 = 0.6, z = 0.2533, Q = 100 + 0.2533*30.",
+      "kind": "newsvendor",
+      "inputs": {"price": 10, "cost": 4, "demand_mean": 100, "demand_sd": 30},
+      "expected": {"critical_ratio": 0.6, "optimal_quantity": 107.6},
+      "tol": 0.1
+    },
+    {
+      "id": "overbooking-service-level-hand",
+      "source": "Hand-derived from the deterministic service-level formula: capacity 100, 10% no-shows, authorize round(100/0.9) = 111, expected show-ups 111*0.9 = 99.9.",
+      "kind": "overbooking_service",
+      "inputs": {"capacity": 100, "no_show_rate": 0.1},
+      "expected": {"authorization_limit": 111, "expected_shows": 99.9},
+      "tol": 0.05
+    }
+  ]
+}
