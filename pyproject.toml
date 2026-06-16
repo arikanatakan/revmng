@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "revmng"
-version = "0.1.0"
+version = "0.2.0"
 description = "Revenue management for Python: single-leg seat protection (Littlewood, EMSR-a/b), overbooking, pricing, network bid prices and the standard performance metrics. Computed from standard methods and validated against published worked examples."
 readme = "README.md"
 license = { text = "MIT" }

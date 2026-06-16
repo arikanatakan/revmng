@@ -46,8 +46,12 @@ from .network import NetworkResult, Product, bid_prices
 from .optimal import optimal_protection_levels, policy_revenue
 from .overbooking import OverbookingResult, overbooking_limit
 from .plot import (
+    bid_price_chart,
     booking_limit_chart,
+    emsr_curve,
+    newsvendor_curve,
     overbooking_cost_curve,
+    price_curve,
     revenue_opportunity_chart,
 )
 from .pricing import (
@@ -80,7 +84,9 @@ __all__ = [
     # network bid prices (needs scipy)
     "bid_prices", "Product", "NetworkResult",
     # charts (needs matplotlib)
-    "booking_limit_chart", "overbooking_cost_curve", "revenue_opportunity_chart",
+    "booking_limit_chart", "emsr_curve", "overbooking_cost_curve",
+    "price_curve", "newsvendor_curve", "revenue_opportunity_chart",
+    "bid_price_chart",
     # shared
     "Alert", "__version__",
 ]

@@ -95,7 +95,7 @@ n.accept(fare=250, uses={"AB": 1, "BC": 1})
 | Performance metrics | `revpar`, `adr`, `occupancy`, `yield_`, `load_factor`, `rasm`, `casm`, `spill`, `spoilage` |
 | Revenue opportunity | `revenue_opportunity`, `nested_revenue` |
 | Network (needs SciPy) | `bid_prices`, `Product` |
-| Charts (needs matplotlib) | `booking_limit_chart`, `overbooking_cost_curve`, `revenue_opportunity_chart` |
+| Charts (needs matplotlib) | `booking_limit_chart`, `emsr_curve`, `overbooking_cost_curve`, `price_curve`, `newsvendor_curve`, `revenue_opportunity_chart`, `bid_price_chart` |
 
 `optimal_protection_levels` computes the exact optimal nested protection levels
 by dynamic programming (the policy the EMSR heuristics approximate) and reports

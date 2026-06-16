@@ -12,6 +12,8 @@ BAR = "#3b6ea5"
 BAR2 = "#9ec2e6"
 ACC = "#3a8f78"
 GRID = "#dce3ea"
+NEUT_E = "#9aa7b3"
+CURVES = ("#2c5f8a", "#3b6ea5", "#6b9bc7", "#9ec2e6")
 
 
 def _mpl():
@@ -86,6 +88,151 @@ def overbooking_cost_curve(capacity, no_show_rate, denied_cost, spoilage_cost, *
                  fontweight="bold", loc="left")
     _style(ax)
     ax.grid(axis="y", color=GRID, linewidth=0.8)
+    if fig is not None:
+        fig.tight_layout()
+    return fig if fig is not None else ax.figure
+
+
+def emsr_curve(result, *, ax=None):
+    """Expected marginal seat revenue curves behind an ``AllocationResult``.
+
+    For each boundary the pooled higher classes give a declining curve
+    ``r_bar * P(S > x)``; where it crosses the next fare is the EMSR-b protection
+    level (drawn as a vertical line). Intended for ``emsr_a`` / ``emsr_b``
+    results.
+    """
+    plt = _mpl()
+    import math
+
+    from ._stats import norm_cdf
+
+    classes = [(c["fare"], c["mean"], c["sd"]) for c in result.classes]
+    cap = int(result.capacity)
+    xs = list(range(cap + 1))
+    fig = None
+    if ax is None:
+        fig, ax = plt.subplots(figsize=(7.6, 4.6))
+    for j in range(1, len(classes)):
+        higher = classes[:j]
+        mu = sum(c[1] for c in higher)
+        sd = math.sqrt(sum(c[2] ** 2 for c in higher))
+        wfare = sum(c[0] * c[1] for c in higher) / mu if mu > 0 else higher[0][0]
+        nextfare = classes[j][0]
+        colour = CURVES[(j - 1) % len(CURVES)]
+        if sd > 0:
+            ys = [wfare * (1.0 - norm_cdf((x - mu) / sd)) for x in xs]
+        else:
+            ys = [wfare if x < mu else 0.0 for x in xs]
+        ax.plot(xs, ys, color=colour, linewidth=1.7,
+                label=f"protect classes 1-{j}")
+        ax.axhline(nextfare, color=colour, linestyle=":", linewidth=1.0)
+        ax.axvline(result.protection_levels[j - 1], color=ACC, linestyle="--",
+                   linewidth=1.1)
+    ax.set_xlabel("seats protected")
+    ax.set_ylabel("expected marginal seat revenue")
+    ax.set_title(f"{result.method} - EMSR curves, capacity {cap}", color=INK,
+                 fontsize=11, fontweight="bold", loc="left")
+    ax.legend(frameon=False, fontsize=8, loc="upper right")
+    _style(ax)
+    ax.grid(axis="y", color=GRID, linewidth=0.8)
+    if fig is not None:
+        fig.tight_layout()
+    return fig if fig is not None else ax.figure
+
+
+def price_curve(demand, unit_cost=0.0, *, ax=None):
+    """Revenue, profit and demand against price, marking the optimal price."""
+    plt = _mpl()
+    from .pricing import optimal_price
+
+    res = optimal_price(demand, unit_cost)
+    lo, hi = res.optimal_price * 0.2, res.optimal_price * 2.2
+    ps = [lo + (hi - lo) * i / 200 for i in range(201)]
+    dem, rev, prof = [], [], []
+    for p in ps:
+        q = max(0.0, demand.demand(p))
+        dem.append(q)
+        rev.append(p * q)
+        prof.append((p - unit_cost) * q)
+    fig = None
+    if ax is None:
+        fig, ax = plt.subplots(figsize=(7.6, 4.6))
+    ax.plot(ps, rev, color=BAR, linewidth=1.8, label="revenue")
+    ax.plot(ps, prof, color=ACC, linewidth=1.8, label="profit")
+    ax.axvline(res.optimal_price, color=MUT, linestyle="--", linewidth=1.1)
+    ax.text(res.optimal_price, max(rev), f" p* = {res.optimal_price:,.2f}",
+            color=MUT, fontsize=8.5, va="top")
+    ax.set_xlabel("price")
+    ax.set_ylabel("revenue / profit")
+    ax.set_title("price optimization", color=INK, fontsize=11,
+                 fontweight="bold", loc="left")
+    ax2 = ax.twinx()
+    ax2.plot(ps, dem, color=NEUT_E, linewidth=1.1, linestyle=":", label="demand")
+    ax2.set_ylabel("demand", color=MUT)
+    ax2.tick_params(colors=MUT, labelsize=9)
+    ax.legend(frameon=False, fontsize=8, loc="upper center")
+    _style(ax)
+    ax.grid(axis="y", color=GRID, linewidth=0.8)
+    if fig is not None:
+        fig.tight_layout()
+    return fig if fig is not None else ax.figure
+
+
+def newsvendor_curve(price, cost, demand_mean, demand_sd, *, salvage=0.0, ax=None):
+    """Expected profit against order quantity, marking the optimal quantity."""
+    plt = _mpl()
+    from ._stats import norm_loss
+    from .pricing import newsvendor
+
+    res = newsvendor(price, cost, demand_mean, demand_sd, salvage=salvage)
+    underage, overage = price - cost, cost - salvage
+    lo = max(0.0, demand_mean - 3 * demand_sd)
+    hi = demand_mean + 3 * demand_sd
+    qs = [lo + (hi - lo) * i / 200 for i in range(201)]
+    prof = []
+    for q in qs:
+        z = (q - demand_mean) / demand_sd if demand_sd > 0 else 0.0
+        shortage = demand_sd * norm_loss(z)
+        sales = demand_mean - shortage
+        leftover = q - demand_mean + shortage
+        prof.append(underage * sales - overage * leftover)
+    fig = None
+    if ax is None:
+        fig, ax = plt.subplots(figsize=(7.6, 4.6))
+    ax.plot(qs, prof, color=BAR, linewidth=1.8)
+    ax.axvline(res.optimal_quantity, color=ACC, linestyle="--", linewidth=1.2)
+    ax.text(res.optimal_quantity, min(prof), f" Q* = {res.optimal_quantity:,.1f}",
+            color=ACC, fontsize=8.5, va="bottom")
+    ax.set_xlabel("order quantity")
+    ax.set_ylabel("expected profit")
+    ax.set_title(f"newsvendor - critical ratio {res.critical_ratio:.2f}",
+                 color=INK, fontsize=11, fontweight="bold", loc="left")
+    _style(ax)
+    ax.grid(axis="y", color=GRID, linewidth=0.8)
+    if fig is not None:
+        fig.tight_layout()
+    return fig if fig is not None else ax.figure
+
+
+def bid_price_chart(result, *, ax=None):
+    """Bid price per resource from a ``NetworkResult``."""
+    plt = _mpl()
+    names = list(result.resources)
+    vals = [result.bid_prices[r] for r in names]
+    y = range(len(names))
+    fig = None
+    if ax is None:
+        fig, ax = plt.subplots(figsize=(7.0, 0.6 * len(names) + 1.4))
+    ax.barh(list(y), vals, color=BAR, edgecolor=INK, linewidth=0.6, height=0.6)
+    for i, v in zip(y, vals):
+        ax.text(v, i, f" {v:,.2f}", va="center", ha="left", fontsize=9, color=INK)
+    ax.set_yticks(list(y))
+    ax.set_yticklabels(names)
+    ax.invert_yaxis()
+    ax.set_xlabel("bid price")
+    ax.set_title("network bid prices", color=INK, fontsize=11,
+                 fontweight="bold", loc="left")
+    _style(ax)
     if fig is not None:
         fig.tight_layout()
     return fig if fig is not None else ax.figure

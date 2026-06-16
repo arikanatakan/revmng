@@ -4,6 +4,16 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project uses
 [semantic versioning](https://semver.org/).
 
+## [0.2.0] - 2026-06-16
+
+### Added
+
+- Signature charts for the remaining methods (need matplotlib, `revmng[plot]`):
+  `emsr_curve` (expected marginal seat revenue curves and protection levels),
+  `price_curve` (revenue, profit and demand against price), `newsvendor_curve`
+  (expected profit against order quantity) and `bid_price_chart` (bid price per
+  resource).
+
 ## [0.1.0] - 2026-06-16
 
 First release.
