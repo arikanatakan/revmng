@@ -108,8 +108,11 @@ def evaluate_group(group_rate: float, units: float, *,
         raise ValueError("units must be positive")
     if (displacement_cost is None) == (marginal_value is None):
         raise ValueError("provide exactly one of displacement_cost or marginal_value")
-    disp = float(displacement_cost) if displacement_cost is not None \
-        else float(marginal_value) * units
+    if displacement_cost is not None:
+        disp = float(displacement_cost)
+    else:
+        assert marginal_value is not None  # guaranteed by the check above
+        disp = float(marginal_value) * units
 
     contribution = (group_rate - variable_cost) * units
     net = contribution - disp

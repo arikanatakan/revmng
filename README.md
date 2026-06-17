@@ -153,6 +153,12 @@ about 0.5% of it, matching Belobaba's reported near-optimality.
   (2004).
 - R. Phillips, *Pricing and Revenue Optimization* (2005).
 
+## Related
+
+[revmng-mcp](https://github.com/arikanatakan/revmng-mcp) exposes these
+revenue-management decisions and charts to AI agents over the Model Context
+Protocol.
+
 ## License
 
 MIT. Written and maintained by [Atakan Arikan](https://github.com/arikanatakan),
